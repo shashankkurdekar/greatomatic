@@ -10,94 +10,91 @@ import {
   Phone,
   MapPin,
   BadgeCheck,
+  Check,
 } from "lucide-react";
 import { useLayoutEffect, useState } from "react";
 import { IAdmin } from "@/types/admin.interface";
 import Link from "next/link";
 
-// const admins = [
-//   {
-//     id: 1,
-//     name: "RAYMOND AVIL MADTHA",
-//     designation: "Managing Director (MD)",
-//     adminId: "GIL/Admin-0121",
-//     mobile: "7676390549",
-//     email: "md@greatomatic.com",
-//     address:
-//       "Diya House, South Beeramangala, Near Church, Sullia, Dakshina Kannada, Karnataka",
-//     image: "https://i.pravatar.cc/150?img=3",
-//     status: "Active",
-//   },
-//   {
-//     id: 2,
-//     name: "ABHIJITH S KUMAR",
-//     designation: "Chief Executive Officer (CEO)",
-//     adminId: "GIL/Admin-0123",
-//     mobile: "7204193283",
-//     email: "ceo@greatomatic.com",
-//     address:
-//       "Abhayashraya, Opp Shamili Gas Agency, NH66, Puttur, Karnataka",
-//     image: "https://i.pravatar.cc/150?img=12",
-//     status: "Active",
-//   },
-//   {
-//     id: 3,
-//     name: "SATISH P KURDEKAR",
-//     designation: "Chief Technology Officer (CTO)",
-//     adminId: "GIL/Admin-0156",
-//     mobile: "9900934045",
-//     email: "cto@greatomatic.com",
-//     address:
-//       "Yeragunte, Devraj Urs Layout, Davanagere, Karnataka",
-//     image: "https://i.pravatar.cc/150?img=15",
-//     status: "Active",
-//   },
-//   {
-//     id: 4,
-//     name: "ROCKY D'SOUZA",
-//     designation: "Chief Human Resources Officer",
-//     adminId: "GIL/Admin-0174",
-//     mobile: "9844667059",
-//     email: "chro@greatomatic.com",
-//     address:
-//       "Moodbidri, Dakshina Kannada, Karnataka",
-//     image: "https://i.pravatar.cc/150?img=18",
-//     status: "Inactive",
-//   },
-// ];
-
 export default function AdminManageComponent() {
-    const [admins, setAdmins] = useState<IAdmin[]>([]);
-    const [search, setSearch] = useState("");
-    useLayoutEffect(() => {
-        const fetchAdmins = async () => {
-            try {
-                const response = await fetch('/api/superadmin/admin/manage');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch admins');
-                }
-                const data: IAdmin[] = await response.json();
-                setAdmins(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+  const [admins, setAdmins] = useState<IAdmin[]>([]);
+  const [search, setSearch] = useState("");
+  useLayoutEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const response = await fetch("/api/superadmin/admin/manage");
+        if (!response.ok) {
+          throw new Error("Failed to fetch admins");
+        }
+        const data: IAdmin[] = await response.json();
+        setAdmins(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        fetchAdmins();
-    }, [])
-    const filteredAdmins = admins.filter((admin) => {
-  const keyword = search.toLowerCase();
+    fetchAdmins();
+  }, []);
+  const filteredAdmins = admins.filter((admin) => {
+    const keyword = search.toLowerCase();
 
-  return (
-    admin.name.toLowerCase().includes(keyword) ||
-    admin.role.toLowerCase().includes(keyword) ||
-    admin.adminID.toLowerCase().includes(keyword) ||
-    admin.mobile.includes(keyword) ||
-    admin.email.toLowerCase().includes(keyword) ||
-    admin.address.toLowerCase().includes(keyword) ||
-    admin.status.toLowerCase().includes(keyword)
-  );
-});
+    return (
+      admin.name.toLowerCase().includes(keyword) ||
+      admin.role.toLowerCase().includes(keyword) ||
+      admin.adminID.toLowerCase().includes(keyword) ||
+      admin.mobile.includes(keyword) ||
+      admin.email.toLowerCase().includes(keyword) ||
+      admin.address.toLowerCase().includes(keyword) ||
+      admin.status.toLowerCase().includes(keyword)
+    );
+  });
+
+  const handleDeactivate = async (adminID: string) => {
+    if (!confirm("Are you sure you want to deactivate this admin?")) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/superadmin/admin/deactivate`, {
+        method: "PATCH",
+        body: JSON.stringify({ id: adminID }),
+      });
+      if (!res.ok) {
+        alert("Something went wrong while deactivating the admin.");
+      }
+      // mark admin as inactive (soft delete) by setting status to "0"
+      setAdmins((prevAdmins) =>
+        prevAdmins.map((admin) =>
+          admin.adminID == adminID ? { ...admin, status: "0" } : admin
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while deactivating the admin.");
+    }
+  };
+  const handleActivate = async (adminID: string) => {
+    if (!confirm("Are you sure you want to activate this admin?")) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/superadmin/admin/activate`, {
+        method: "PATCH",
+        body: JSON.stringify({ id: adminID }),
+      });
+      if (!res.ok) {
+        alert("Something went wrong while activating the admin.");
+      }
+      // mark admin as active by setting status to "1"
+      setAdmins((prevAdmins) =>
+        prevAdmins.map((admin) =>
+          admin.adminID == adminID ? { ...admin, status: "1" } : admin
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while activating the admin.");
+    }
+  };
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="mx-auto max-w-7xl">
@@ -218,15 +215,31 @@ export default function AdminManageComponent() {
                   {/* Buttons */}
 
                   <div className="flex flex-col gap-3">
-                    <button className="flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 font-medium text-white hover:bg-amber-600">
+                    <Link
+                      href={`/superadmin/admin/edit/${admin.adminID}`}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 font-medium text-white hover:bg-amber-600 duration-300"
+                    >
                       <Pencil size={18} />
                       Edit
-                    </button>
+                    </Link>
 
-                    <button className="flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 font-medium text-white hover:bg-red-700">
-                      <Trash2 size={18} />
-                      Delete
-                    </button>
+                    {admin.status === "1" ? (
+                      <button
+                        onClick={() => handleDeactivate(admin.adminID)}
+                        className="flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 font-medium text-white hover:bg-red-700 duration-300"
+                      >
+                        <Trash2 size={18} />
+                        Deactivate
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleActivate(admin.adminID)}
+                        className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-medium text-white hover:bg-green-700 duration-300"
+                      >
+                        <Check size={18} />
+                        Activate
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

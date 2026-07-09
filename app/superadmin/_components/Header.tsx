@@ -1,9 +1,7 @@
 "use client";
 
 import {
-  Bell,
   Menu,
-  Search,
   UserCircle2,
 } from "lucide-react";
 

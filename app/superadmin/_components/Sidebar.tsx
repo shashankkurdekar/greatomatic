@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   Users,
-  Building2,
   BriefcaseBusiness,
   FileQuestion,
   ImagePlus,
@@ -13,6 +12,7 @@ import {
   X,
   BuildingIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   open: boolean;
@@ -95,22 +95,29 @@ const menu = [
     href: "/superadmin/password",
     icon: Lock,
   },
-   
 ];
 
-export default function Sidebar({
-  open,
-  setOpen,
-}: Props) {
+export default function Sidebar({ open, setOpen }: Props) {
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/superadmin/logout");
+      if (response.ok) {
+        router.push("/login/admin");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while logging out.");
+    }
+  };
+
   return (
     <>
       {/* Overlay */}
       <div
         onClick={() => setOpen(false)}
         className={`fixed inset-0 bg-black/40 z-40 transition lg:hidden ${
-          open
-            ? "opacity-100 visible"
-            : "opacity-0 invisible"
+          open ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       />
 
@@ -127,39 +134,25 @@ export default function Sidebar({
         transition-transform
         duration-300
         lg:translate-x-0
-        ${
-          open
-            ? "translate-x-0"
-            : "-translate-x-full"
-        }
+        ${open ? "translate-x-0" : "-translate-x-full"}
       `}
       >
         {/* Logo */}
         <div className="h-20 border-b border-white/10 flex items-center justify-between px-6">
-
           <div>
-            <h2 className="text-2xl font-bold">
-              Greatomatic
-            </h2>
+            <h2 className="text-2xl font-bold">Greatomatic</h2>
 
-            <p className="text-xs text-slate-400">
-              Super Admin
-            </p>
+            <p className="text-xs text-slate-400">Super Admin</p>
           </div>
 
-          <button
-            className="lg:hidden"
-            onClick={() => setOpen(false)}
-          >
+          <button className="lg:hidden" onClick={() => setOpen(false)}>
             <X />
           </button>
-
         </div>
 
         {/* Menu */}
 
         <div className="mt-6 px-4 space-y-2">
-
           {menu.map((item) => {
             const Icon = item.icon;
 
@@ -184,13 +177,11 @@ export default function Sidebar({
               </Link>
             );
           })}
-
         </div>
 
         {/* Logout */}
 
         <div className="absolute bottom-6 left-4 right-4">
-
           <button
             className="
             flex
@@ -202,15 +193,15 @@ export default function Sidebar({
             bg-red-600
             py-3
             hover:bg-red-700
+            duration-300
+            cursor-pointer
           "
+          onClick={handleLogout}
           >
             <LogOut size={18} />
-
             Logout
           </button>
-
         </div>
-
       </aside>
     </>
   );
