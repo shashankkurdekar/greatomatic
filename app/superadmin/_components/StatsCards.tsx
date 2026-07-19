@@ -20,6 +20,8 @@ type CountRow = RowDataPacket & {
 export default async function StatsCards() {
   const [rows] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM admin WHERE role = 'admin'");
   const totalAdmins = rows[0]?.count ?? 0;
+  const [rows1] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM jobs WHERE OfficeType = 'Head Office'");
+  const totalJobs = rows1[0]?.count ?? 0;
   
 
   const stats = [
@@ -57,9 +59,10 @@ export default async function StatsCards() {
     },
     {
       title: "Active Jobs",
-      value: "83",
+      value: totalJobs,
       icon: BriefcaseBusiness,
       color: "from-violet-500 to-purple-500",
+      href: "/superadmin/jobs/manage"
     },
     {
       title: "Question Papers",
