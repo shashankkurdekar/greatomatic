@@ -20,7 +20,7 @@ type CountRow = RowDataPacket & {
 export default async function StatsCards() {
   const [rows] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM admin WHERE role = 'admin'");
   const totalAdmins = rows[0]?.count ?? 0;
-  const [rows1] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM jobs WHERE OfficeType = 'Head Office'");
+  const [rows1] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM jobs WHERE OfficeType = 'Head Office' AND Status = '1'");
   const totalJobs = rows1[0]?.count ?? 0;
   
 
