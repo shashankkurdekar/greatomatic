@@ -15,44 +15,44 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function Table({jobs}: { jobs: IJobs[] }) {
-    const router = useRouter();
-    async function handleDelete(id: number) {
-        if (!confirm("Are you sure want to deactivate this job")) {
-            return;
-        }
-        try {
-            const res = await fetch("/api/superadmin/jobs/delete", {
-                method: "DELETE",
-                body: JSON.stringify({ id })
-            });
-            if (res.ok) {
-                alert("Job Deleted Successfully");
-                router.push("/superadmin");
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Something went wrong.")
-        }
+export default function Table({ jobs }: { jobs: IJobs[] }) {
+  const router = useRouter();
+  async function handleDelete(id: number) {
+    if (!confirm("Are you sure want to deactivate this job")) {
+      return;
     }
-    async function handleActivate(id: number) {
-        if (!confirm("Are you sure want to activate this job")) {
-            return;
-        }
-        try {
-            const res = await fetch("/api/superadmin/jobs/activate", {
-                method: "PATCH",
-                body: JSON.stringify({ id })
-            });
-            if (res.ok) {
-                alert("Job Activated Successfully");
-                router.push("/superadmin");
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Something went wrong.")
-        }
+    try {
+      const res = await fetch("/api/superadmin/jobs/delete", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        alert("Job Deleted Successfully");
+        router.push("/superadmin");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
     }
+  }
+  async function handleActivate(id: number) {
+    if (!confirm("Are you sure want to activate this job")) {
+      return;
+    }
+    try {
+      const res = await fetch("/api/superadmin/jobs/activate", {
+        method: "PATCH",
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        alert("Job Activated Successfully");
+        router.push("/superadmin");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    }
+  }
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="mx-auto max-w-7xl">
@@ -145,7 +145,12 @@ export default function Table({jobs}: { jobs: IJobs[] }) {
 
                   <td className="px-6 py-6">
                     <div className="flex justify-center gap-3">
-                      <button className="rounded-xl bg-amber-500 p-3 text-white hover:bg-amber-600">
+                      <button
+                        className="rounded-xl bg-amber-500 p-3 text-white hover:bg-amber-600"
+                        onClick={() =>
+                          router.push(`/superadmin/jobs/edit/${job.id}`)
+                        }
+                      >
                         <Pencil size={18} />
                       </button>
 
