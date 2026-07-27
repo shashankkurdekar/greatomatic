@@ -8,21 +8,28 @@ import {
   FileQuestion,
   ImagePlus,
 } from "lucide-react";
-import { RowDataPacket } from 'mysql2';
-import pool from '@/lib/db'
+import { RowDataPacket } from "mysql2";
+import pool from "@/lib/db";
 import Link from "next/link";
-
 
 type CountRow = RowDataPacket & {
   count: number;
 };
 
 export default async function StatsCards() {
-  const [rows] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM admin WHERE role = 'admin'");
+  const [rows] = await pool.query<CountRow[]>(
+    "SELECT COUNT(*) as count FROM admin WHERE role = 'admin'",
+  );
   const totalAdmins = rows[0]?.count ?? 0;
-  const [rows1] = await pool.query<CountRow[]>("SELECT COUNT(*) as count FROM jobs WHERE OfficeType = 'Head Office' AND Status = '1'");
+  const [rows1] = await pool.query<CountRow[]>(
+    "SELECT COUNT(*) as count FROM jobs WHERE OfficeType = 'Head Office' AND Status = '1'",
+  );
   const totalJobs = rows1[0]?.count ?? 0;
-  
+  const [rows2] = await pool.query<CountRow[]>(`SELECT COUNT(*) AS count
+                                                FROM information_schema.TABLES
+                                                WHERE TABLE_SCHEMA = DATABASE()
+                                                AND TABLE_NAME REGEXP '^[^_]+_[^_]+_[^_]+_[^_]+$';`);
+  const totalQuestionPapers = rows2[0]?.count ?? 0;
 
   const stats = [
     {
@@ -37,7 +44,6 @@ export default async function StatsCards() {
       value: "28",
       icon: Building2,
       color: "from-indigo-500 to-blue-500",
-      
     },
     {
       title: "District Branches",
@@ -62,11 +68,11 @@ export default async function StatsCards() {
       value: totalJobs,
       icon: BriefcaseBusiness,
       color: "from-violet-500 to-purple-500",
-      href: "/superadmin/jobs/manage"
+      href: "/superadmin/jobs/manage",
     },
     {
       title: "Question Papers",
-      value: "140",
+      value: totalQuestionPapers,
       icon: FileQuestion,
       color: "from-sky-500 to-cyan-500",
     },
@@ -122,9 +128,7 @@ export default async function StatsCards() {
 
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-slate-500">
-                  {item.title}
-                </p>
+                <p className="text-sm text-slate-500">{item.title}</p>
 
                 <h2 className="mt-3 text-4xl font-bold text-slate-900">
                   {item.value}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 type Question = {
@@ -20,6 +20,7 @@ export default function CreateQuestionsComponent() {
   const jobType = params.get("jobType") ?? "";
   const jobName = params.get("jobName") ?? "";
   const newJobName = jobName.split(" ")[0];
+  const router = useRouter();
 
   let i = 0;
   const [questions, setQuestions] = useState<Question[]>(() => [
@@ -107,7 +108,8 @@ export default function CreateQuestionsComponent() {
                 })
             })
             if (res.ok) {
-                alert("1")
+              alert("Question Paper Created Successfully");
+              router.replace("/superadmin")
             }
         } catch (error) {
             console.error(error);

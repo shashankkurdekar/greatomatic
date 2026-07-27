@@ -13,7 +13,7 @@ import { JobNames } from "@/types/JobNames.interface";
 import { useRouter } from "next/navigation";
 
 export default function AddQuestionsComponent() {
-    const router = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     office: "",
     branch: "",
@@ -21,19 +21,33 @@ export default function AddQuestionsComponent() {
     designation: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const res = await fetch("/api/superadmin/questions/count", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
 
-    router.push(`/superadmin/questions/create?office=${formData.office}&branch=${formData.branch}&jobType=${formData.jobType}&jobName=${formData.designation}`)
+      if (!res.ok) {
+        alert(data.error);
+        return;
+      }
+      router.push(
+        `/superadmin/questions/create?office=${formData.office}&branch=${formData.branch}&jobType=${formData.jobType}&jobName=${formData.designation}`,
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Something Went Wrong");
+    }
   };
 
   const handleReset = () => {
