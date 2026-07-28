@@ -30,6 +30,10 @@ export default async function StatsCards() {
                                                 WHERE TABLE_SCHEMA = DATABASE()
                                                 AND TABLE_NAME REGEXP '^[^_]+_[^_]+_[^_]+_[^_]+$';`);
   const totalQuestionPapers = rows2[0]?.count ?? 0;
+   const [rows3] = await pool.query<CountRow[]>(
+    "SELECT COUNT(*) as count FROM jobposter",
+  );
+  const totalPosters = rows3[0]?.count ?? 0;
 
   const stats = [
     {
@@ -78,9 +82,10 @@ export default async function StatsCards() {
     },
     {
       title: "Job Posters",
-      value: "64",
+      value: totalPosters,
       icon: ImagePlus,
       color: "from-red-500 to-pink-500",
+      href: "/superadmin/posters/manage"
     },
   ];
   return (
