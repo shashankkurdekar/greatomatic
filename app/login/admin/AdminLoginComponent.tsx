@@ -39,6 +39,9 @@ export default function AdminLoginComponent() {
           alert("Invalid credentials. Please contact support.");
         }
       }
+      else {
+        alert("Invalid credentials.");
+      }
     } catch (error) {
       console.error(
         process.env.NODE_ENV === "development"
