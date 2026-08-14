@@ -1,9 +1,10 @@
 import DashboardLayout from "./_components/DashboardLayout";
+import StatsCard from "./_components/StatsCard";
 
 export default function Admin() {
   return (
     <DashboardLayout>
-      <h1>Dashboard</h1>
+      <StatsCard />
     </DashboardLayout>
   );
 }

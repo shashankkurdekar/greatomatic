@@ -71,7 +71,7 @@ export default function Header({
             <div className="hidden md:block">
 
               <p className="font-semibold">
-                Super Admin
+                Admin
               </p>
 
               <p className="text-sm text-slate-500">

@@ -3,14 +3,12 @@
 import Link from "next/link";
 import {
   LayoutDashboard,
-  Users,
-  BriefcaseBusiness,
-  FileQuestion,
-  ImagePlus,
   Lock,
   LogOut,
   X,
   BuildingIcon,
+  Pencil,
+  Plus,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -22,77 +20,27 @@ interface Props {
 const menu = [
   {
     name: "Dashboard",
-    href: "/superadmin",
+    href: "/admin",
     icon: LayoutDashboard,
   },
   {
-    name: "Create Admin",
-    href: "/superadmin/admin/create",
-    icon: Users,
-  },
-  // {
-  //   name: "Manage Admins",
-  //   href: "/superadmin/admin/manage",
-  //   icon: Users,
-  // },
-  // {
-  //   name: "Manage State Branches",
-  //   href: "/superadmin/branches/state",
-  //   icon: Building2,
-  // },
-  // {
-  //   name: "Manage District Branches",
-  //   href: "/superadmin/branches/district",
-  //   icon: Building2,
-  // },
-  // {
-  //   name: "Manage Taluk / Tehsil Branches",
-  //   href: "/superadmin/branches/taluk",
-  //   icon: Building2,
-  // },
-  // {
-  //   name: "Manage Village / City Branches",
-  //   href: "/superadmin/branches/village",
-  //   icon: Building2,
-  // },
-  {
-    name: "Add Jobs",
-    href: "/superadmin/jobs/add",
-    icon: BriefcaseBusiness,
-  },
-  // {
-  //   name: "Manage Jobs",
-  //   href: "/superadmin/jobs/manage",
-  //   icon: BriefcaseBusiness,
-  // },
-  {
-    name: "Add Question Papers",
-    href: "/superadmin/questions/add",
-    icon: FileQuestion,
-  },
-  // {
-  //   name: "Manage Question Papers",
-  //   href: "/superadmin/questions/manage",
-  //   icon: FileQuestion,
-  // },
-  {
-    name: "Add Job Posters",
-    href: "/superadmin/posters/add",
-    icon: ImagePlus,
-  },
-  // {
-  //   name: "Manage Job Posters",
-  //   href: "/superadmin/posters/manage",
-  //   icon: ImagePlus,
-  // },
-  {
-    name: "View Head Office Results",
-    href: "/superadmin/head-office-results",
+    name: "Add State Branch",
+    href: "/admin/branch/create",
     icon: BuildingIcon,
   },
   {
+    name: "Add Event",
+    href: "/admin/event/add",
+    icon: Plus,
+  },
+  {
+    name: "Manage Events",
+    href: "/admin/event/manage",
+    icon: Pencil,
+  },
+  {
     name: "Change Password",
-    href: "/superadmin/password",
+    href: "/admin/password",
     icon: Lock,
   },
 ];
@@ -142,7 +90,7 @@ export default function Sidebar({ open, setOpen }: Props) {
           <div>
             <h2 className="text-2xl font-bold">Greatomatic</h2>
 
-            <p className="text-xs text-slate-400">Super Admin</p>
+            <p className="text-xs text-slate-400">Admin</p>
           </div>
 
           <button className="lg:hidden" onClick={() => setOpen(false)}>
