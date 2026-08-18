@@ -9,7 +9,7 @@ import nodemailer from "nodemailer";
 export async function POST(req: NextRequest) {
   try {
     const cookiesStore = await cookies();
-    const token = cookiesStore.get("admintoken");
+    const token = cookiesStore.get("superadmintoken");
 
     if (!token) {
       return NextResponse.json(

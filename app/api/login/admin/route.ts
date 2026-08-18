@@ -26,7 +26,12 @@ export async function POST(req: NextRequest) {
         }
         const token = jwt.sign({ email: admin.email, role: admin.role }, process.env.JWT_SECRET!, { expiresIn: '4h' });
         const cookieStore = await cookies();
-        cookieStore.set('admintoken', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 4 * 60 * 60 });
+        if (email === "superadmin@greatomatic.com") {
+            cookieStore.set('superadmintoken', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 4 * 60 * 60 });
+        }
+        else {
+            cookieStore.set('admintoken', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 4 * 60 * 60 });
+        }
         return NextResponse.json({ message: "Login successful.", role: admin.role }, { status: 200 });
     } catch (error) {
         console.error(process.env.NODE_ENV === "development" ? error : "An error occurred during login.");

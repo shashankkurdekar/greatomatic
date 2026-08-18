@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: Props) {
   useLayoutEffect(() => {
     const checkLoggedIn = async () => {
       try {
-        const response = await fetch("/api/superadmin/checklogin");
+        const response = await fetch("/api/admin/checklogin");
         if (!response.ok) {
           router.push("/login/admin");
         }
@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: Props) {
 
     const logout = async () => {
       try {
-        await fetch("/api/superadmin/logout");
+        await fetch("/api/admin/logout");
         router.push("/login/admin");
       } catch (error) {
         console.error(error);

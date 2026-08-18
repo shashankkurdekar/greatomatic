@@ -49,7 +49,7 @@ export default function Sidebar({ open, setOpen }: Props) {
   const router = useRouter();
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/superadmin/logout");
+      const response = await fetch("/api/admin/logout");
       if (response.ok) {
         router.push("/login/admin");
       }

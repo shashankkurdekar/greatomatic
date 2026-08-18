@@ -146,13 +146,13 @@ export default function Header() {
       group-hover:translate-y-0
     "
             >
-              <a href="#" className="block px-4 py-3 hover:bg-gray-100 border-b border-gray-200">
+              <Link href="/jobs/search" className="block px-4 py-3 hover:bg-gray-100 border-b border-gray-200">
                 Search Jobs
-              </a>
+              </Link>
 
-              <a href="#" className="block px-4 py-3 hover:bg-gray-100 border-t border-gray-200">
+              <Link href="/jobs/status" className="block px-4 py-3 hover:bg-gray-100 border-t border-gray-200">
                 Check Job Status
-              </a>
+              </Link>
             </div>
           </div>
           |
@@ -175,13 +175,13 @@ export default function Header() {
       group-hover:translate-y-0
     "
             >
-              <a href="#" className="block px-4 py-3 hover:bg-gray-100 border-b border-gray-200">
+              <Link href="/appointments/search" className="block px-4 py-3 hover:bg-gray-100 border-b border-gray-200">
                 Search Admins
-              </a>
+              </Link>
 
-              <a href="#" className="block px-4 py-3 hover:bg-gray-100 border-t border-gray-200">
+              <Link href="/appointments/status" className="block px-4 py-3 hover:bg-gray-100 border-t border-gray-200">
                 Check Appointment Status
-              </a>
+              </Link>
             </div>
           </div>
           |

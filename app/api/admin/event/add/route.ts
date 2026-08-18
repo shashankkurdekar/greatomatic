@@ -128,6 +128,12 @@ export async function POST(req: NextRequest) {
         const result = rows as { name: string }[];
         return result[0]?.name || "";
       });
+    const mobile = await pool
+      .execute("SELECT mobile FROM admin WHERE email = ?", [adminEmail])
+      .then(([rows]) => {
+        const result = rows as { mobile: string }[];
+        return result[0]?.mobile || "";
+      });
 
     // ----------------------------------------
     // 5. Insert event
@@ -135,11 +141,12 @@ export async function POST(req: NextRequest) {
 
     const [result] = await pool.execute(
       `
-        INSERT INTO event (fullname, email, state, district, taluk, landmark, date, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO event (fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         fullname,
         adminEmail,
+        mobile,
         stateName,
         districtName,
         talukName,
