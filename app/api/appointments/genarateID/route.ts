@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(req: NextRequest) {
     try {
-        const { fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time } = await req.json();
-        const token = jwt.sign({ fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time }, process.env.JWT_SECRET!);
+        const { fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time, id } = await req.json();
+        const token = jwt.sign({ fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time, id }, process.env.JWT_SECRET!);
         return NextResponse.json(token, { status: 200 })
     } catch (error) {
         console.error('Error genarating id:', error);

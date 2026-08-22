@@ -20,8 +20,22 @@ export async function POST(req: NextRequest) {
     const cookieStore = await cookies();
 
     const cookieotp = cookieStore.get("otp")?.value;
+    const decodedToken = cookieotp ? jwt.decode(cookieotp) : null;
+    const decodedOtp =
+      decodedToken && typeof decodedToken === "object" && "otp" in decodedToken
+        ? String(decodedToken.otp)
+        : null;
+    const decodedEmail =
+      decodedToken && typeof decodedToken === "object" && "email" in decodedToken
+        ? String(decodedToken.email).trim().toLowerCase()
+        : null;
 
-    if (cookieotp !== otp) 
+    if (decodedEmail !== normalizedEmail || decodedOtp !== String(otp)) {
+      return NextResponse.json(
+        { error: "Invalid OTP." },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json(
       {

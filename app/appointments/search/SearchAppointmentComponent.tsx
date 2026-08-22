@@ -18,6 +18,7 @@ interface SelectOption {
 }
 
 interface Appointments {
+  id: string;
   fullname: string;
   email: string;
   mobile: string;
@@ -154,11 +155,11 @@ export default function SearchAppointmentComponent() {
 
   const router = useRouter();
 
-  async function handleBook(fullname: string, email: string, mobile: string, state: string, district: string, taluk: string, landmark: string, date: string, start_time: string, end_time: string) {
+  async function handleBook(fullname: string, email: string, mobile: string, state: string, district: string, taluk: string, landmark: string, date: string, start_time: string, end_time: string, id: string) {
     try {
       const res = await fetch("/api/appointments/genarateID", {
         method: "POST",
-        body: JSON.stringify({ fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time })
+        body: JSON.stringify({ fullname, email, mobile, state, district, taluk, landmark, date, start_time, end_time, id })
       });
       if (res.ok) {
         const data = await res.json();
@@ -356,7 +357,7 @@ export default function SearchAppointmentComponent() {
 
                     <button
                       type="button"
-                      onClick={() => handleBook(admin.fullname, admin.email, admin.mobile, admin.state, admin.district, admin.taluk, admin.landmark, admin.date, admin.start_time, admin.end_time)}
+                      onClick={() => handleBook(admin.fullname, admin.email, admin.mobile, admin.state, admin.district, admin.taluk, admin.landmark, admin.date, admin.start_time, admin.end_time, admin.id)}
                       className="rounded-xl bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white"
                     >
                       Book Appoinment

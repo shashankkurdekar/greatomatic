@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       .randomInt(100000, 1000000)
       .toString();
 
-    const token = jwt.sign({ otp }, process.env.JWT_SECRET!);
+    const token = jwt.sign({ otp, email }, process.env.JWT_SECRET!);
 
     const cookieStore = await cookies();
 

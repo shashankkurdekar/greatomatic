@@ -12,20 +12,28 @@ import {
   ShieldCheck,
   CheckCircle2,
   RefreshCw,
+  Clock,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   fullname: string;
   email: string;
   mobile: string;
+  time: string;
+  id: string;
 }
 
-export default function BookAppointmentComponent() {
+export default function BookAppointmentComponent({ address, date, start_time, end_time, id }: { address: string, date: string, start_time: string, end_time: string, id: string }) {
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
     email: "",
     mobile: "",
+    time: "",
+    id: id
   });
+
+  const router = useRouter();
 
   const [otp, setOtp] = useState("");
 
@@ -198,7 +206,7 @@ export default function BookAppointmentComponent() {
   // =========================================================
 
   const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.SubmitEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
@@ -236,10 +244,14 @@ export default function BookAppointmentComponent() {
 
       alert("Appointment booked successfully!");
 
+      router.replace("/");
+
       setFormData({
         fullname: "",
         email: "",
         mobile: "",
+        time: "",
+        id: id,
       });
 
       setOtp("");
@@ -564,6 +576,38 @@ export default function BookAppointmentComponent() {
                 </div>
 
               </div>
+              {/* Time */}
+
+              <div className="md:col-span-2">
+
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  Select Preffered Time
+                  <span className="ml-1 text-red-500">
+                    *
+                  </span>
+                </label>
+
+                <div className="relative">
+
+                  <Clock
+                    size={19}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+
+                  <input
+                    type="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleChange}
+                    min={start_time}
+                    max={end_time}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 py-4 pl-12 pr-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  />
+
+                </div>
+
+              </div>
 
             </div>
 
@@ -606,7 +650,7 @@ export default function BookAppointmentComponent() {
                   </p>
 
                   <p className="mt-1 text-sm font-semibold">
-                    Appointment Date
+                    {date}
                   </p>
                 </div>
 
@@ -617,11 +661,11 @@ export default function BookAppointmentComponent() {
                   />
 
                   <p className="mt-2 text-xs text-slate-400">
-                    Time
+                    Availability
                   </p>
 
                   <p className="mt-1 text-sm font-semibold">
-                    Scheduled Time
+                    {start_time} to {end_time}
                   </p>
                 </div>
 
@@ -636,7 +680,7 @@ export default function BookAppointmentComponent() {
                   </p>
 
                   <p className="mt-1 text-sm font-semibold">
-                    Appointment Location
+                    {address}
                   </p>
                 </div>
 
